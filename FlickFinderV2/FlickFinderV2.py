@@ -6,8 +6,13 @@ import datetime
 #Insert your API key below
 apiKey = 'AIzaSyApcjXnIsUwD64XkH1vfEMJSvv4ROqhOyc'
 
+#A single movie title will be added for now, but later an entire list of movies and runtimes will be used.
+movieTitle = 'The Rock'
+
 #Grabbing links off of page
-r = requests.get(r'https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=10&q=The+Rock&type=video&videoDuration=long&key=' + apiKey)
+#r = requests.get(r'https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=10&q=The+Rock&type=video&videoDuration=long&key=' + apiKey)
+r = requests.get(r'https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=10&q='+movieTitle+'Rock&type=video&videoDuration=long&key=' + apiKey)
+
 
 #turning the response json key value pairs
 data = r.json()
@@ -48,7 +53,7 @@ for val in data['items']:
 		IDAndTitleAndLength[val['id']] = IDAndTitleAndLength[val['id']] + ',' + val['contentDetails']['duration']
 
 #The below data structure can now be checked against the list of movies you read into the script
-print IDAndTitleAndLength.keys()
+print IDAndTitleAndLength.items()
 
 ##
 #Some code here to check the 2000_MovieList file against the IDAndTitleAndLength dictionary and check to see if
