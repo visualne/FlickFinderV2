@@ -4,7 +4,7 @@ import datetime
 
 
 #Insert your API key below
-apiKey = 'AIzaSyApcjXnIsUwD64XkH1vfEMJSvv4ROqhOyc'
+apiKey = ''
 
 #A single movie title will be added for now, but later an entire list of movies and runtimes will be used.
 movieTitle = 'The Rock'
