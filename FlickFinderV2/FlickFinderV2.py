@@ -11,7 +11,7 @@ movieTitle = 'The Rock'
 
 #Grabbing links off of page
 #r = requests.get(r'https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=10&q=The+Rock&type=video&videoDuration=long&key=' + apiKey)
-r = requests.get(r'https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=10&q='+movieTitle+'Rock&type=video&videoDuration=long&key=' + apiKey)
+r = requests.get(r'https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=10&q='+movieTitle+'&type=video&videoDuration=long&key=' + apiKey)
 
 
 #turning the response json key value pairs
