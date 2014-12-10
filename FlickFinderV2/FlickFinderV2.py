@@ -14,7 +14,7 @@ def compareRuntimes(IDAndTitleAndLength, movieTitle, movieRuntime):
 
 
 #Insert your API key below
-apiKey = 'AIzaSyApcjXnIsUwD64XkH1vfEMJSvv4ROqhOyc'
+apiKey = ''
 
 #A opening up our list of movies and runtimes for each movie.
 f = open('2000_MovieList','r')
