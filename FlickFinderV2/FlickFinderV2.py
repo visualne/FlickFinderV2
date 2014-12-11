@@ -4,7 +4,7 @@ import datetime
 import time
 
 def compareRuntimes(IDAndTitleAndLength, movieTitle, movieRuntime):
-	#Checking to see if runtimes match
+	"""This function checks to to see if runtimes match"""
 	for val in IDAndTitleAndLength.values():
 		#Grabbing the runtime only
 		runtime = val.split('*')[1][2:]
