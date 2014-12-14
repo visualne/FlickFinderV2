@@ -2,6 +2,7 @@ import requests
 import json
 import datetime
 import time
+import isodate
 
 class FlickFinderV2:
 
@@ -14,6 +15,9 @@ class FlickFinderV2:
 		#A opening up our list of movies and runtimes for each movie.
 		f = open(self.movieList,'r')
 
+		#Printing starting search message
+		print 'Starting search...\n'
+
 		for val in f.readlines():
 			#Splitting the line read in from in the input file into a list.
 			TitleRuntimeYear = val.split('*')
@@ -23,7 +27,6 @@ class FlickFinderV2:
 
 			#Storing the runtime of the movies read in from the input file in its own variable called movieRuntime
 			movieRuntime = TitleRuntimeYear[1]
-			print movieTitle + ' Runtime: ' + movieRuntime
 
     		#Grabbing links off of page
 			r = requests.get(r'https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=10&q='+movieTitle+'&type=video&videoDuration=long&key=' + self.apiKey)
@@ -81,19 +84,31 @@ class FlickFinderV2:
 
 	def compareRuntimes(self, IDAndTitleAndLength, movieTitle, movieRuntime):
 		"""This function checks to to see if runtimes match"""
-		for val in IDAndTitleAndLength.values():
+		
+		#The for loop below looks through the IDAndTitleAndLength dictionary looking for runtimes
+		for k,v in IDAndTitleAndLength.items():
 			#Grabbing the runtime only
-			runtime = val.split('*')[1][2:]
-			title = val.split('*')[0]
-			#Need a way to store the below time in the format HH:MM:SS
-			print runtime + ' Title: ' + title
+			runtime = v.split('*')[1]
+			title = v.split('*')[0]
+			videoID = k
+
+			#converting movieRuntime sent in into this format HH:MM:00. Aparently seconds are not considered
+			#part of a legitimate runtime.
+			duration=isodate.parse_duration(runtime)
+			convertedRuntime = time.strftime('%H:%M:00', time.gmtime(duration.seconds))
+
+			#Checking for actual match and printing possible match output. I had to strip off the leading 0 from the converted
+			#runtime in order for it to be in a format that will work for the runtime read in from the input file. Hopefully movies
+			#won't be greater then 09:59:59 :)
+			if movieRuntime == convertedRuntime[1:]:
+				print "Possible match found: Title: " + movieTitle + " Link: " + 'https://www.youtube.com/watch?v=' + videoID
 
 
 
 #Example use listed below
 
 #Initializes the object with the api key as the first aguement and the movie list file name as the second arguement
-a = FlickFinderV2("AIzaSyChTmo5lV8IdLNnnUJqT4IdiAcdSHN0CDM","2000_MovieList")
+a = FlickFinderV2("AIzaSyAPLEpZgnfkvyxX2QuFT60LFDKg84WWSJQ","2000_MovieList")
 
 #Starts the search
 a.search()
