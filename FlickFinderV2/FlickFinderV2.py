@@ -7,7 +7,13 @@ import isodate
 class FlickFinderV2:
 
     def __init__(self, apiKey,movieList):
-        """This constructor creates the FlickFinderV2 object using the apiKey and movieList(textFile name) you send in"""
+        """This constructor creates the FlickFinderV2 object 
+
+        Args:
+            apiKey (str) The first parameter. This will be your public google api key.
+            movieList(str) The second parameter. This will be the filename of a movie list that you have created
+
+        """
         self.apiKey = apiKey
         self.movieList = movieList
 
