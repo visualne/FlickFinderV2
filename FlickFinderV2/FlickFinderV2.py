@@ -11,7 +11,7 @@ class FlickFinderV2:
 
         Args:
             apiKey (str) The first parameter. This will be your public google api key.
-            movieList(str) The second parameter. This will be the filename of a movie list that you have created
+            movieList (str) The second parameter. This will be the filename of a movie list that you have created
 
         """
         self.apiKey = apiKey
