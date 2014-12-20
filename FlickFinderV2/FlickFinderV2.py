@@ -6,7 +6,7 @@ import isodate
 
 class FlickFinderV2:
 
-    def __init__(self, apiKey,movieList):
+    def __init__(self, apiKey, movieList):
         """This constructor creates the FlickFinderV2 object 
 
         Args:
@@ -18,6 +18,8 @@ class FlickFinderV2:
         self.movieList = movieList
 
     def search(self):
+        """This function searches youtube for movies read in from the input file movieList filename"""
+
         #A opening up our list of movies and runtimes for each movie.
         f = open(self.movieList,'r')
 
@@ -44,16 +46,23 @@ class FlickFinderV2:
             #the video
             IDAndTitleAndLength={}
 
-            #Second API for determining the length of each of the videos
-            videoLengthsLink = 'https://www.googleapis.com/youtube/v3/videos?part=contentDetails&id='
-
             #The loop below determines the title and id of the video from the above api first api that was queried with requests
             for val in data['items']:
+                #Creating empty dictionary that will eventually hold videoTitle,videoDuration of videos found on youtube
+                titleAndDuration = []
+
                 title = val['snippet']['title']
                 videoId = val['id']['videoId']
 
-                #Filling dictionary with id:title pairs ex) sf@a234asdf:'Happy Gilmore'
-                IDAndTitleAndLength[videoId] = title
+                #Adding the title only to the titleAndDuration list. The runtime will be added after the next api query.
+                titleAndDuration.append(title)
+
+                #Filling dictionary with id:title pairs ex) 'sf@a234asdf':['Title of some video that may or may not be the video we are looking for']
+                IDAndTitleAndLength[videoId] = titleAndDuration
+
+
+            #Second API for determining the length of each of the videos found from the above api query
+            videoLengthsLink = 'https://www.googleapis.com/youtube/v3/videos?part=contentDetails&id='
 
             #Adding list of IDs to api url
             for key in IDAndTitleAndLength.keys():
@@ -69,33 +78,33 @@ class FlickFinderV2:
             #and the runtime of the movie
             r = requests.get(videoLengthsLink)
 
-            #turning the response json key value pairs
+            #turning the response into json key value pairs
             data = r.json()
 
             #the for loop below adds the runtime of the video to the IDAndTitleAndLength dictionary
             for val in data['items']:
-                IDAndTitleAndLength[val['id']] = IDAndTitleAndLength[val['id']] + '*' + val['contentDetails']['duration']
+                IDAndTitleAndLength[val['id']].append(val['contentDetails']['duration'])
 
-
-            #The below data structure can now be checked against the line read in from the movie list file to see if the runtimes
-            #are close to eachother. If they are within 5 minutes of eachother print the potential match for further checking.
-            #print IDAndTitleAndLength.items()
-
-            #Send the above dictionary and the title and runtime of the movie read in from the input file into a function to check
-            #to see if the runtimes are close to eachother
+            #Calling compareRuntimes function
             self.compareRuntimes(IDAndTitleAndLength, movieTitle, movieRuntime)
 
             #sleeping for 5 seconds
             time.sleep(5)
 
     def compareRuntimes(self, IDAndTitleAndLength, movieTitle, movieRuntime):
-        """This function checks to to see if runtimes match"""
+        """This function checks to to see if runtimes match
+
+        Args:
+            IDAndTitleAndLength (dict) Dictionary containing the following videoID:Name of video found on youtube, runtime of video found on youtube.
+            movieTitle (str) Title of movie read in from input file.
+            moveieRuntime (str) Runtime of movie read in from input file
+        """
 		
         #The for loop below looks through the IDAndTitleAndLength dictionary looking for runtimes
         for k,v in IDAndTitleAndLength.items():
             #Grabbing the runtime only
-            runtime = v.split('*')[1]
-            title = v.split('*')[0]
+            runtime = v[1]
+            title = v[0]
             videoID = k
 
             #converting movieRuntime sent in into this format HH:MM:00. Aparently seconds are not considered
