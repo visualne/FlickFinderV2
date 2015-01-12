@@ -77,8 +77,9 @@ class FlickFinderV2:
         """
 
         #Second API for determining the length of each of the videos found from the above api query
-        videoLengthsLink = 'https://www.googleapis.com/youtube/v3/videos?id=' + '%2c'.join(IDAndTitleAndLength.keys())
+        videoLengthsLink = 'https://www.googleapis.com/youtube/v3/videos'
         params = {'part': 'contentDetails',
+                  'id': ','.join(IDAndTitleAndLength.keys()),
                   'fields': 'items', 'key': self.apiKey}
 
         #Doing second search. This search will tell me the length of each of the videos in my IDAndTitleLength dictionary.
