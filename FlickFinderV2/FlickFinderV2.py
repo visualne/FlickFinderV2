@@ -35,8 +35,13 @@ class FlickFinderV2:
             #Storing the runtime of the movies read in from the input file in its own variable called movieRuntime
             movieRuntime = TitleRuntimeYear[1]
 
+            params = {'part': 'snippet', 'maxResults': 10,
+                    'q': movieTitle, 'type': 'video',
+                    'videoDuration': 'long',
+                    'key': self.apiKey}
             #Grabbing links off of page
-            r = requests.get(r'https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=10&q='+movieTitle+'&type=video&videoDuration=long&key=' + self.apiKey)
+            r = requests.get(r'https://www.googleapis.com/youtube/v3/search',
+                             params=params)
 
             #turning the response json key value pairs
             data = r.json()
@@ -72,21 +77,15 @@ class FlickFinderV2:
         """
 
         #Second API for determining the length of each of the videos found from the above api query
-        videoLengthsLink = 'https://www.googleapis.com/youtube/v3/videos?part=contentDetails&id='
-
-        #Adding list of IDs to api url
-        for key in IDAndTitleAndLength.keys():
-            videoLengthsLink =  videoLengthsLink + key + '%2C'
-
-        #Creating rest of the videoLengthsLink
-        videoLengthsLink = videoLengthsLink + '&fields=items&key=' + self.apiKey
-
+        videoLengthsLink = 'https://www.googleapis.com/youtube/v3/videos?id=' + '%2c'.join(IDAndTitleAndLength.keys())
+        params = {'part': 'contentDetails',
+                  'fields': 'items', 'key': self.apiKey}
 
         #Doing second search. This search will tell me the length of each of the videos in my IDAndTitleLength dictionary.
         #I called the variable IDAndTitleLength because after the below for loop is finished the dictionary will look like this
         #ex) sf@a234asdf:'Happy Gilmore*PT59M56S' I now have a dictionary that contains the video id of the movie found, the title of the movie
         #and the runtime of the movie
-        r = requests.get(videoLengthsLink)
+        r = requests.get(videoLengthsLink, params=params)
 
         #turning the response into json key value pairs
         data = r.json()
