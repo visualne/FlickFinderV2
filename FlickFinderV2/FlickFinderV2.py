@@ -131,8 +131,12 @@ class FlickFinderV2:
 
 #Example use listed below
 if __name__ == '__main__':
+    
+    #Fill in your google api key below.
+    apiKey = ''
+
     #Initializes the object with the api key as the first aguement and the movie list file name as the second arguement
-    a = FlickFinderV2("AIzaSyAPLEpZgnfkvyxX2QuFT60LFDKg84WWSJQ","2000_MovieList")
+    a = FlickFinderV2(apiKey,"2000_MovieList")
 
     #Starts the search
     a.searchMovies()
