@@ -3,6 +3,7 @@ import json
 import datetime
 import time
 import isodate
+from rentalCheck import rentalCheck
 
 class FlickFinderV2:
 
@@ -126,7 +127,16 @@ class FlickFinderV2:
             #runtime in order for it to be in a format that will work for the runtime read in from the input file. Hopefully movies
             #won't be greater then 09:59:59 :)
             if movieRuntime == convertedRuntime[1:]:
-                print "Possible match found: Title: " + movieTitle + " Link: " + 'https://www.youtube.com/watch?v=' + videoID
+                
+                #Checking to see if this movie is a rental 
+                a = rentalCheck(videoID)
+
+                #A returned value of true means it scraped the page and found
+                #information the leads it to believe it is a rental. Why scrape? 
+                #I don't believe the api can tell me what movies are rentals. I will
+                #look into this more
+                if a.status() is False:
+                    print "Possible match found: Title: " + movieTitle + " Link: " + 'https://www.youtube.com/watch?v=' + videoID
 
 
 
