@@ -3,6 +3,7 @@ import json
 import datetime
 import time
 import isodate
+import argparse
 from rentalCheck import rentalCheck
 
 class FlickFinderV2:
@@ -142,12 +143,27 @@ class FlickFinderV2:
 
 #Example use listed below
 if __name__ == '__main__':
-    
-    #Fill in your google api key below.
-    apiKey = ''
+
+    #Creating parser object that will be used for command line arguments
+    parser = argparse.ArgumentParser()
+
+    #Adding apikey arguement to parser object. This will be the YouTube
+    #Data API v3 api key
+    parser.add_argument('--apikey', required=True, 
+    nargs='?', help='This is your YouTube Data API v3 api key')
+
+    #Adding the movielist arguement to the parser object. This will be the
+    #list of movies sent into the script.
+    parser.add_argument('--movielist', required=False, 
+    default='2000_MovieList',nargs='?',
+    help='This is the list of movies sent in. Default: 2000_MovieList')
+
+    #Creating args object that will hold each of the arguments sent into
+    #the parser object.
+    args = parser.parse_args()
 
     #Initializes the object with the api key as the first aguement and the movie list file name as the second arguement
-    a = FlickFinderV2(apiKey,"2000_MovieList")
+    a = FlickFinderV2(args.apikey,args.movielist)
 
     #Starts the search
     a.searchMovies()
