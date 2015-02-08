@@ -29,7 +29,7 @@ class statusCheck:
         #Checking for various strings in the html that would lead one to believe 
         #the movie is a rental or just some phoney link if there is a match we will return true, 
         #that will mean it is a rental.
-        match = re.search('watch-checkout-offers|TO WATCH FULL MOVIE|http://bit|online free full movie',response)
+        match = re.search('watch-checkout-offers|TO WATCH FULL MOVIE|http://bit|online free full movie|http://po.st|http://t.co',response)
 
         #returning true if the above text was found in the page. This would
         #mean that the movie is a rental or a phone link of some kind.

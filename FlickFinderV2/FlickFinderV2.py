@@ -131,7 +131,6 @@ class FlickFinderV2:
             if movieRuntime[1:].strip() == convertedRuntime[1:]:
             # if movieRuntime == convertedRuntime:
                 #Checking to see if this movie is a rental 
-                # a = rentalCheck(videoID)
                 a = statusCheck(videoID)
 
                 #A returned value of true means it scraped the page and found
