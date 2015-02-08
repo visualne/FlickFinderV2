@@ -4,7 +4,7 @@ import datetime
 import time
 import isodate
 import argparse
-from rentalCheck import rentalCheck
+from statusCheck import statusCheck
 
 class FlickFinderV2:
 
@@ -127,17 +127,20 @@ class FlickFinderV2:
             #Checking for actual match and printing possible match output. I had to strip off the leading 0 from the converted
             #runtime in order for it to be in a format that will work for the runtime read in from the input file. Hopefully movies
             #won't be greater then 09:59:59 :)
-            if movieRuntime == convertedRuntime[1:]:
-                
+            # print 'Read in runtime is: ' + movieRuntime[1:] + ' Found runtime: ' + convertedRuntime[1:]
+            if movieRuntime[1:].strip() == convertedRuntime[1:]:
+            # if movieRuntime == convertedRuntime:
                 #Checking to see if this movie is a rental 
-                a = rentalCheck(videoID)
+                # a = rentalCheck(videoID)
+                a = statusCheck(videoID)
 
                 #A returned value of true means it scraped the page and found
-                #information the leads it to believe it is a rental. Why scrape? 
-                #I don't believe the api can tell me what movies are rentals. I will
+                #information the leads it to believe it is a rental or some kind of phoney movie. 
+                #Why scrape for rental information? #I don't believe the api can tell me what movies are rentals. I will
                 #look into this more
                 if a.status() is False:
-                    print "Possible match found: Title: " + movieTitle + " Link: " + 'https://www.youtube.com/watch?v=' + videoID
+                    print "Possible match found: Title: " + str(movieTitle) + " Link: " + 'https://www.youtube.com/watch?v=' + str(videoID)
+
 
 
 
@@ -155,8 +158,8 @@ if __name__ == '__main__':
     #Adding the movielist arguement to the parser object. This will be the
     #list of movies sent into the script.
     parser.add_argument('--movielist', required=False, 
-    default='2000_MovieList',nargs='?',
-    help='This is the list of movies sent in. Default: 2000_MovieList')
+    default='2000Movies.txt',nargs='?',
+    help='This is the list of movies sent in. Default: 2000Movies.txt')
 
     #Creating args object that will hold each of the arguments sent into
     #the parser object.
