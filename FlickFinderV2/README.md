@@ -1,7 +1,7 @@
 ###DISCLAIMER 
 I did not upload any of the pirated content that this script may or may not find. This script is only to be used for educational purposes only.
 
-###Overvew
+###Overview
 
 This script reads in a list of movies and runtimes from an input file. It then
 hits the youtube apis with the title of the movie, looking for movies on youtube
