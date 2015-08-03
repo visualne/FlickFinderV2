@@ -45,29 +45,37 @@ class FlickFinderV2:
             r = requests.get(r'https://www.googleapis.com/youtube/v3/search',
                              params=params)
 
-            #turning the response json key value pairs
-            data = r.json()
+            #Checking to see if the api request returned successfully.
+            try:
+                #Grabbing links off of page
+                r = requests.get(r'https://www.googleapis.com/youtube/v3/search',params=params)
+            
+                #turning the response json key value pairs
+                data = r.json()
 
-            #Creating empty dictionary that holds the title of the video along with the id of
-            #the video
-            IDAndTitleAndLength={}
+                #Creating empty dictionary that holds the title of the video along with the id of
+                #the video
+                IDAndTitleAndLength={}
 
-            #The loop below determines the title and id of the video from the above api first api that was queried with requests
-            for val in data['items']:
-                #Creating empty dictionary that will eventually hold videoTitle,videoDuration of videos found on youtube
-                titleAndDuration = []
+                #The loop below determines the title and id of the video from the above api first api that was queried with requests
+                for val in data['items']:
+                    #Creating empty dictionary that will eventually hold videoTitle,videoDuration of videos found on youtube
+                    titleAndDuration = []
 
-                title = val['snippet']['title']
-                videoId = val['id']['videoId']
+                    title = val['snippet']['title']
+                    videoId = val['id']['videoId']
 
-                #Adding the title only to the titleAndDuration list. The runtime will be added after the next api query.
-                titleAndDuration.append(title)
+                    #Adding the title only to the titleAndDuration list. The runtime will be added after the next api query.
+                    titleAndDuration.append(title)
 
-                #Filling dictionary with id:title pairs ex) 'sf@a234asdf':['Title of some video that may or may not be the video we are looking for']
-                IDAndTitleAndLength[videoId] = titleAndDuration
+                    #Filling dictionary with id:title pairs ex) 'sf@a234asdf':['Title of some video that may or may not be the video we are looking for']
+                    IDAndTitleAndLength[videoId] = titleAndDuration
 
-            #Calling function to retrieve the runtimes of each of the videos found in the IDTitleAndLength dictionary
-            self.findRuntimes(IDAndTitleAndLength,movieTitle,movieRuntime)
+                #Calling function to retrieve the runtimes of each of the videos found in the IDTitleAndLength dictionary
+                self.findRuntimes(IDAndTitleAndLength,movieTitle,movieRuntime)
+
+            except:
+                pass
 
     def findRuntimes(self,IDAndTitleAndLength,movieTitle,movieRuntime):
         """This function searches youtube for the runtimes of each of the movies found in the IDAndTitleAndLength dictionary
@@ -87,21 +95,24 @@ class FlickFinderV2:
         #Doing second search. This search will tell me the length of each of the videos in my IDAndTitleLength dictionary.
         #I called the variable IDAndTitleLength because after the below for loop is finished the dictionary will look like this
         #ex) sf@a234asdf:'Happy Gilmore*PT59M56S' I now have a dictionary that contains the video id of the movie found, the title of the movie
-        #and the runtime of the movie
-        r = requests.get(videoLengthsLink, params=params)
+        #and the runtime of the movie 
+        try:
+            r = requests.get(videoLengthsLink, params=params)
 
-        #turning the response into json key value pairs
-        data = r.json()
+            #turning the response into json key value pairs
+            data = r.json()
 
-        #the for loop below adds the runtime of the video to the IDAndTitleAndLength dictionary
-        for val in data['items']:
-            IDAndTitleAndLength[val['id']].append(val['contentDetails']['duration'])
+            #the for loop below adds the runtime of the video to the IDAndTitleAndLength dictionary
+            for val in data['items']:
+                IDAndTitleAndLength[val['id']].append(val['contentDetails']['duration'])
 
-        #Calling compareRuntimes function
-        self.compareRuntimes(IDAndTitleAndLength, movieTitle, movieRuntime)
+            #Calling compareRuntimes function
+            self.compareRuntimes(IDAndTitleAndLength, movieTitle, movieRuntime)
 
-        #sleeping for 5 seconds
-        time.sleep(5)
+            #sleeping for 5 seconds
+            time.sleep(5)
+        except:
+            pass
 
     def compareRuntimes(self, IDAndTitleAndLength, movieTitle, movieRuntime):
         """This function checks to to see if runtimes found match what was read in from the input file
@@ -139,8 +150,6 @@ class FlickFinderV2:
                 #look into this more
                 if a.status() is False:
                     print "Possible match found: Title: " + str(movieTitle) + " Link: " + 'https://www.youtube.com/watch?v=' + str(videoID)
-
-
 
 
 #Example use listed below
