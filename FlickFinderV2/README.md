@@ -12,7 +12,6 @@ Usage example: python FlickFinder.py --apikey alkjsdfjadsj;fkla --movielist 2001
 *You will have to install the isodate python module in order to get this to run
 
 #Things to do
-- Check for 200 status for both api calls
 - Add more regular expressions to status function in statusCheck class that looks for movies that are phoney.
 - When google updates the youtube api with a way to check to see if a movie is a rental the code will need to be changed.
 - Clean up the compare runtimes function
